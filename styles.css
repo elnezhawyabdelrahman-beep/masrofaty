@@ -14,3 +14,5 @@ body.dark{--bg:#101b18;--surface:#192722;--ink:#e7f0eb;--muted:#9aaba3;--line:#2
 .tx-delete{border:0;background:#fff0ed;color:#c35d56;border-radius:9px;width:29px;height:29px;font-size:19px;line-height:1;flex:0 0 29px}.tx-delete:hover{background:#f9dcd7}body.dark .tx-delete{background:#402b29;color:#ffaaa2}
 
 .tx-edit{border:0;background:#e8f3ee;color:#176b57;border-radius:9px;width:29px;height:29px;font-size:16px;line-height:1;flex:0 0 29px}.tx-edit:hover{background:#d6eae0}body.dark .tx-edit{background:#203b30;color:#9bd3b6}
+
+.tx-edit{border:0;background:#e8f3ee;color:#176b57;border-radius:9px;width:29px;height:29px;font-size:16px;line-height:1;flex:0 0 29px}.tx-edit:hover{background:#d6eae0}body.dark .tx-edit{background:#203b30;color:#9bd3b6}
