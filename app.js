@@ -81,4 +81,25 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPro
 $('#install-btn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('#install-btn').hidden=true};
 window.addEventListener('appinstalled',()=>{$('#install-btn').hidden=true;showToast('تم تثبيت مصروفاتي على جهازك')});
 if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)$('#install-btn').hidden=true;
+
+function assistantReply(raw){
+ const q=raw.toLowerCase().trim(),m=monthTx(),inc=sum(m,'income'),exp=sum(m,'expense');
+ const groups=EXPENSES.map(c=>({c,v:m.filter(x=>x.type==='expense'&&x.category===c).reduce((a,x)=>a+Number(x.amount),0)})).filter(x=>x.v).sort((a,b)=>b.v-a.v),top=groups[0];
+ if(/^(مرحبا|السلام عليكم|اهلا|أهلا|هاي|hi|hello)/.test(q))return'أهلاً بيك! اسألني عن مصروفاتك أو دخلك أو ميزانياتك، أو اطلب خطة توفير.';
+ if(/(ملخص|لخص|حسابات|الشهر ده|هذا الشهر)/.test(q))return'ملخص الشهر الحالي:\n• الدخل: '+fmt(inc)+'\n• المصروفات: '+fmt(exp)+'\n• الصافي: '+fmt(inc-exp)+'\n• عدد العمليات: '+m.length+'\n'+(top?'أعلى إنفاق في '+top.c+' بمبلغ '+fmt(top.v)+'.':'لا توجد مصروفات مسجلة هذا الشهر.')+(inc<exp?'\nتنبيه: مصروفاتك أعلى من دخلك المسجل هذا الشهر.':'');
+ if(/(أكتر|اكثر|أعلى|اعلى|فين|تصنيف|قسم|بصرف|انفاق|إنفاق)/.test(q))return top?'أعلى تصنيف إنفاق هو '+top.c+' بمبلغ '+fmt(top.v)+' ('+Math.round(top.v/exp*100)+'٪ من مصروفات الشهر).'+(groups[1]?' يليه '+groups[1].c+' بمبلغ '+fmt(groups[1].v)+'.':''):'لسه مفيش مصروفات كفاية لتحليلها.';
+ if(/(ميزاني|حدود|تجاوز|متبقي|المتبقي|راجع)/.test(q)){if(!data.budgets.length)return'لسه ما حددتش ميزانيات. افتح صفحة الميزانيات وحدد حدًا شهريًا لكل تصنيف.';return'مراجعة ميزانياتك:\n'+data.budgets.map(b=>{const v=m.filter(x=>x.type==='expense'&&x.category===b.category).reduce((a,x)=>a+Number(x.amount),0),left=b.limit-v;return'• '+b.category+': '+fmt(v)+' من '+fmt(b.limit)+' — '+(left>=0?'متبقي '+fmt(left):'تجاوزت بـ '+fmt(-left))}).join('\n')}
+ if(/(وفر|أوفر|توفير|ادخار|أدخر|نصيح)/.test(q)){if(!exp)return'سجّل مصروفاتك لمدة أسبوع على الأقل، وبعدها أقدر أحدد مجالات التوفير من أرقامك الفعلية.';const t=groups.find(g=>['ترفيه','تسوق','مشروبات','مأكولات'].includes(g.c))||top;return'اقتراح قابل للتجربة: قلل إنفاقك في '+t.c+' بنسبة 10٪ الشهر القادم. ده قد يوفر حوالي '+fmt(Math.round(t.v*.1))+'. راقب النتيجة وسجّل عملياتك بانتظام.'}
+ if(/(دخل|مصروف|رصيد|فلوس|معايا|صافي)/.test(q))return'رصيدك الحالي حسب كل العمليات المسجلة: '+fmt(sum(data.transactions,'income')-sum(data.transactions,'expense'))+'. دخل الشهر '+fmt(inc)+' ومصروفاته '+fmt(exp)+'.';
+ if(/(ضيف|أضف|إضافة|سجل|سجّل|عملية جديدة)/.test(q)){openTx(/دخل/.test(q)?'income':'expense');return'فتحت لك نموذج تسجيل العملية. اكتب الاسم والمبلغ، وسأقترح التصنيف تلقائيًا.'}
+ if(/(بيانات|خصوص|آمن|بتبعت|انترنت)/.test(q))return'المساعد الحالي يحلل بياناتك محليًا على جهازك ولا يرسل سجل معاملاتك إلى خدمة ذكاء اصطناعي خارجية. البحث عن صور المنتجات يحتاج إنترنت.';
+ return'أقدر أساعدك في تحليل الشهر، معرفة أكثر تصنيف إنفاقًا، مراجعة الميزانيات، اقتراح التوفير، أو فتح نموذج إضافة دخل ومصروف. جرّب: «لخص لي مصروفاتي الشهر ده».';
+}
+function assistantMessage(text,who){const el=document.createElement('div');el.className='assistant-msg '+who;el.textContent=text;$('#assistant-messages').appendChild(el);$('#assistant-messages').scrollTop=$('#assistant-messages').scrollHeight}
+function askAssistant(q){if(!q.trim())return;assistantMessage(q,'user');assistantMessage(assistantReply(q),'bot')}
+$('#assistant-launcher').onclick=()=>{$('#assistant-panel').hidden=false;$('#assistant-launcher').hidden=true;$('#assistant-input').focus()};
+$('#assistant-close').onclick=()=>{$('#assistant-panel').hidden=true;$('#assistant-launcher').hidden=false};
+$('#assistant-form').onsubmit=e=>{e.preventDefault();const input=$('#assistant-input'),q=input.value;input.value='';askAssistant(q)};
+$('[data-ask]').forEach(b=>b.onclick=()=>askAssistant(b.dataset.ask));
+
 const now=new Date();$('#today-label').textContent=now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('#page-title').textContent=(now.getHours()<12?'صباح الخير':'مساء الخير')+' 👋';render();
