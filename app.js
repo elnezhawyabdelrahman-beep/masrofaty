@@ -91,10 +91,11 @@ $('#assistant-enabled-toggle').checked=localStorage.getItem('mas_assistant_enabl
 $('#add-custom-category').onclick=()=>{const input=$('#custom-category-name'),name=input.value.trim();if(!name){showToast('اكتب اسم التصنيف أولاً');return}if(EXPENSES.includes(name)){showToast('التصنيف موجود بالفعل');return}if(EXPENSES.length>=35){showToast('وصلت للحد الأقصى للتصنيفات');return}EXPENSES.splice(EXPENSES.length-1,0,name);const defaults=['مأكولات','مشروبات','مواصلات','منزل وفواتير','تسوق','صحة','تعليم','ترفيه','أخرى'];localStorage.setItem('mas_custom_categories',JSON.stringify(EXPENSES.filter(x=>!defaults.includes(x))));input.value='';showToast('تمت إضافة التصنيف: '+name);$('#budget-category').innerHTML=EXPENSES.map(x=>'<option>'+x+'</option>').join('');render()};
 renderNotificationCenter();
 if('serviceWorker'in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;if(!matchMedia('(display-mode: standalone)').matches&&!navigator.standalone)$('#install-btn').hidden=false});
-$('#install-btn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('#install-btn').hidden=true};
+const isInstalled=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#install-btn').hidden=isInstalled()});
+$('#install-btn').onclick=async()=>{if(isInstalled()){showToast('التطبيق مثبت بالفعل على جهازك');$('#install-btn').hidden=true;return}if(deferredPrompt){try{deferredPrompt.prompt();const choice=await deferredPrompt.userChoice;if(choice&&choice.outcome==='accepted')showToast('جاري تثبيت مصروفاتي');else showToast('تقدر تثبته في أي وقت من قائمة المتصفح')}catch{showToast('افتح قائمة المتصفح ⋮ واختر تثبيت التطبيق أو إضافة إلى الشاشة الرئيسية')}deferredPrompt=null;return}showToast('للتثبيت: افتح قائمة المتصفح ⋮ ثم اختر تثبيت التطبيق أو إضافة إلى الشاشة الرئيسية')};
 window.addEventListener('appinstalled',()=>{$('#install-btn').hidden=true;showToast('تم تثبيت مصروفاتي على جهازك')});
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)$('#install-btn').hidden=true;
+if(isInstalled())$('#install-btn').hidden=true;
 
 function assistantReply(raw){
  const q=raw.toLowerCase().trim(),m=monthTx(),inc=sum(m,'income'),exp=sum(m,'expense');
