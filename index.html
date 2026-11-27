@@ -34,7 +34,7 @@
 <div class="type-switch"><button type="button" class="selected" data-type="expense">مصروف</button><button type="button" data-type="income">دخل</button></div>
 <label>اسم العملية<input name="title" id="tx-title" required maxlength="60" autocomplete="off" placeholder="مثال: شيبسي، رز، عصير، بنزين"></label>
 <div class="smart-detect"><span class="detect-icon">✦</span><div><b id="detected-category">التصنيف التلقائي: أخرى</b><small id="detect-hint">اكتب اسم المشتريات وسنحاول تحديد التصنيف والصورة.</small></div></div>
-<div class="product-preview" id="product-preview"><div class="product-placeholder">🛍️</div><span>ستظهر صورة المنتج هنا عند العثور عليها</span></div>
+<div class="product-preview" id="product-preview"><div class="product-placeholder">🛍️</div><span>ستظهر صورة المنتج هنا عند العثور عليها</span></div><label class="photo-upload-btn">📷 اختار صورة المنتج من جهازك (اختياري)<input type="file" id="product-photo" accept="image/*" capture="environment"></label>
 <label>المبلغ<input name="amount" required type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00"></label>
 <label>التاريخ<input name="date" type="date" required></label><label>ملاحظة (اختياري)<textarea name="note" rows="2" maxlength="180" placeholder="اكتب أي تفاصيل تساعدك..."></textarea></label>
 <button class="primary-btn submit-btn" type="submit">حفظ العملية</button></form></dialog>
