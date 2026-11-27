@@ -29,3 +29,36 @@ body.dark{--bg:#101b18;--surface:#192722;--ink:#e7f0eb;--muted:#9aaba3;--line:#2
 .assistant-compose input{color:var(--ink)}
 .install-btn{cursor:pointer;min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .install-btn[hidden]{display:none}
+
+/* Financial planning tools and responsive layout refinements */
+.top-theme-switch{display:inline-flex;align-items:center;cursor:pointer}
+.theme-switch input{position:absolute;opacity:0;width:1px;height:1px}
+.theme-switch-track{width:54px;height:30px;border-radius:30px;background:#dce5df;display:flex;align-items:center;padding:3px;transition:background .2s;position:relative}
+.theme-switch-track:after{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;right:3px;top:3px;box-shadow:0 1px 4px #0002;transition:transform .2s}
+.theme-switch-track i{font-style:normal;font-size:14px;color:#6b7c73;position:absolute;left:8px;z-index:1}
+.theme-switch input:checked+.theme-switch-track{background:var(--green2)}
+.theme-switch input:checked+.theme-switch-track:after{transform:translateX(-24px)}
+.theme-switch input:checked+.theme-switch-track i{color:#fff}
+.theme-switch input:focus-visible+.theme-switch-track{outline:2px solid var(--green2);outline-offset:3px}
+.planning-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.planning-panel{min-width:0}.planning-icon{font-size:24px}
+.mini-form{display:grid;gap:10px;padding-bottom:15px;border-bottom:1px solid var(--line)}
+.mini-form label{display:grid;gap:5px;font-size:11px;font-weight:700;color:var(--ink)}
+.mini-form input,.mini-form select,.goal-update input{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);outline-color:var(--green2)}
+.form-pair{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mini-form .primary-btn{justify-self:start}
+.planning-list{display:grid;gap:9px;padding-top:13px}
+.planning-item{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;min-width:0}
+.planning-item-head,.planning-meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.planning-item-head b{font-size:12px;overflow-wrap:anywhere}
+.planning-item strong{font-size:12px}.planning-item small{font-size:10px;color:var(--muted)}
+.planning-meta{font-size:10px;color:var(--muted)}.planning-item .progress-track{height:8px}
+.item-remove{border:0;background:var(--bg);color:var(--red);border-radius:8px;width:27px;height:27px;font-size:18px;flex:0 0 27px}
+.goal-update{display:flex;gap:7px;align-items:center}.goal-update input{max-width:125px;padding:7px;font-size:11px}
+.goal-update .outline-btn{white-space:nowrap}
+.comparison-summary{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:14px;font-size:11px}
+.comparison-summary b{font-size:12px}.comparison-summary span{color:var(--muted)}.comparison-summary strong{font-size:13px}
+@media(min-width:1400px){.planning-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.planning-grid{grid-template-columns:1fr}.main{padding-inline:clamp(14px,3vw,28px)}}
+@media(max-width:700px){.mobile-nav{overflow-x:auto;justify-content:space-between}.mobile-nav button{flex:1 0 0;min-width:0;font-size:17px}.mobile-nav button small{font-size:8px}.top-actions{gap:6px}.top-theme-switch .theme-switch-track{width:48px;height:28px}.top-theme-switch .theme-switch-track:after{width:22px;height:22px}.theme-switch input:checked+.theme-switch-track:after{transform:translateX(-20px)}.planning-grid{gap:11px}.planning-panel{padding:14px}.comparison-summary{gap:8px;flex-direction:column;align-items:flex-start}}
+@media(max-width:380px){.topbar h1{font-size:18px}.top-actions .avatar{display:none}.form-pair{grid-template-columns:1fr}.goal-update{flex-wrap:wrap}.goal-update input{max-width:none;flex:1}}
