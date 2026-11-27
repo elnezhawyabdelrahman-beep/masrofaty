@@ -115,6 +115,6 @@ function askAssistant(q){if(!q.trim())return;assistantMessage(q,'user');assistan
 $('#assistant-launcher').onclick=()=>{$('#assistant-panel').hidden=false;$('#assistant-launcher').hidden=true;$('#assistant-input').focus()};
 $('#assistant-close').onclick=()=>{$('#assistant-panel').hidden=true;$('#assistant-launcher').hidden=false};
 $('#assistant-form').onsubmit=e=>{e.preventDefault();const input=$('#assistant-input'),q=input.value;input.value='';askAssistant(q)};
-$('[data-ask]').forEach(b=>b.onclick=()=>askAssistant(b.dataset.ask));restoreAssistantHistory();
+$$('[data-ask]').forEach(b=>b.onclick=()=>askAssistant(b.dataset.ask));restoreAssistantHistory();
 
 const now=new Date();$('#today-label').textContent=now.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('#page-title').textContent=(now.getHours()<12?'صباح الخير':'مساء الخير')+' 👋';render();
