@@ -13,9 +13,11 @@ const RULES=[
 {c:'تسوق',terms:['ملابس','تيشيرت','بنطلون','حذاء','جزمة','شنطة','ساعة','موبايل','سماعة','ملحقات','clothes','shoes','phone']}
 ];
 const PRODUCT_TERMS=[
-{keys:['شيبسي','شيبس','شيبسى','كاراتيه','كارتيه','chips','karate'],q:'potato chips snack'},
+{keys:['كاراتيه','كارتيه','karate'],q:'Karate chips'},
+{keys:['شيبسي','شيبس','شيبسى','chips'],q:'potato chips'},
 {keys:['رز','ارز','أرز','rice'],q:'rice'},
-{keys:['جلاتي','جيلاتي','ايس كريم','آيس كريم','بوظة','ice cream'],q:'ice cream'},
+{keys:['جلاتي','gelati'],q:'Gelati ice cream'},
+{keys:['جيلاتي','ايس كريم','آيس كريم','بوظة','ice cream'],q:'ice cream'},
 {keys:['عصير','juice'],q:'juice drink'},
 {keys:['بيبسي','كولا','pepsi','cola'],q:'cola soft drink'},
 {keys:['لبن','milk'],q:'milk'},
